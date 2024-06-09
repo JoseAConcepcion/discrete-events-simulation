@@ -1,0 +1,47 @@
+Del estudio de materiales bibliograficos sabemos que para un sistema de colas MM1 donde:
+
+- λ es la tasa de llegada de clientes
+- μ es la tasa de servicio de cada máquina
+- Pn es la probabilidad de que haya n clientes en el sistema
+- L es la cantidad promedio de clientes en el sistema
+- W es la cantidad promedio de tiempo de espera en el sistema
+- Lq es la cantidad promedio de clientes en cola
+- Wq es la cantidad promedio de tiempo de espera en cola
+
+Sea p = λ/μ, podemos calcular:
+
+- Pn = (1-p)*p^n 
+- L = λ/(μ-λ)
+- W = 1/(μ-λ)
+- Lq = λ^2/(μ*(μ - λ))
+- Wq = p/(μ - λ)
+
+Otro resultado interesante es conocer cual es la probabilidad de que haya X o 
+más elementos en el sistema, pues nos permitirá tomar decisiones respecto al 
+dimensionamiento del mismo.
+
+P(n>=X) = p^X
+
+En el caso que nos compete, para el caso de emplear a los hombres como mano de obra denotaremos a los parametros
+como λ1 y μ1, y a los parametros del caso de utilizar a las máquinas como λ2 y μ2. (Las unidades estan dadas en horas)
+Entonces tendriamos que:
+
+- λ1 = λ2 = 3 
+- μ1 = 4
+- μ2 = 8
+
+Luego para el primer caso, los valores de los indicadores en cuestion quedarian:
+
+- Pn = (1-3/4)*(3/4)^n 
+- L = 3/(4-3) = 3
+- W = 1/(4 - 3) = 1
+- Lq = 3^2/(4*(4 - 3)) = 9/4
+- Wq = (3/4)/(4 - 3) = 3/4
+
+Para el segundo caso:
+
+- Pn = (1-3/8)*(3/8)^n 
+- L = 3/(8-3) = 3/5
+- W = 1/(8 - 3) = 1/5
+- Lq = 3^2/(8*(8 - 3)) = 9/40
+- Wq = (3/8)/(8 - 3) 3/40

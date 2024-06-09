@@ -19,8 +19,8 @@ iterations = 30
 days = 30
 # Calcular y guardar los datos de cada iteración
 for i in range(iterations):
-    CostoHombre, maxquee1 = Compute(750000, days*24, 4, 3, 60) # 
-    CostoMaq, maxquee2= Compute(1000000, days*24, 8, 3, 60)
+    CostoHombre, maxquee1, meanSysTime1, meanQueueTime1, meanRepairTime1s = Compute(750000, days*24, 4, 3, 60) # 
+    CostoMaq, maxquee2, meanSysTime, meanQueueTime, meanRepairTime= Compute(1000000, days*24, 8, 3, 60)
     promHom += CostoHombre
     promMaq += CostoMaq
     CostoHombre_total += CostoHombre
@@ -35,7 +35,7 @@ for i in range(iterations):
     data.append([i+1, CostoHombre, maxquee1, CostoMaq, maxquee2, CostoHombre - CostoMaq])
 
 # Calcular promedios y guardar en archivo CSV
-with open(f'datos en {days}.csv', mode='w', newline='') as file:
+with open(f'datos en {days}.csv', mode='w', newline='', encoding='utf-8') as file:
     writer = csv.writer(file)
     # Headers
     headers = ['Número de Simulación', 'Costo de Hombres',
@@ -66,8 +66,8 @@ with open(f'datos extra en {days}.csv', mode='w', newline='') as file:
 
 
 for i in range(iterations): 
-    CostoHombre, maxquee1 = Compute(750000, days*24, 4, 3, 60) # i va a depender del criterio de parada y i >= 30
-    CostoMaq,maxquee2 = Compute(1000000,days*24, 8, 3, 60)
+    CostoHombre, maxquee1, meanSysTime, meanQueueTime, meanRepairTime = Compute(750000, days*24, 4, 3, 60) # i va a depender del criterio de parada y i >= 30
+    CostoMaq,maxque,emeanSysTime, meanQueueTime, meanRepairTime2 = Compute(1000000,days*24, 8, 3, 60)
     promHom += CostoHombre
     promMaq += CostoMaq
     if(CostoHombre-CostoMaq<0): 
