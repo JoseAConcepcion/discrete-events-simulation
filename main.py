@@ -1,5 +1,7 @@
 from simulation import *
 from stats import *
+import csv
+import sys
 
 cant = 0
 promM = 0
@@ -17,7 +19,7 @@ iterations = 30
 days = 30
 # Calcular y guardar los datos de cada iteración
 for i in range(iterations):
-    CostoHombre, maxquee1 = Compute(750000, days*24, 4, 3, 60)
+    CostoHombre, maxquee1 = Compute(750000, days*24, 4, 3, 60) # 
     CostoMaq, maxquee2= Compute(1000000, days*24, 8, 3, 60)
     promHom += CostoHombre
     promMaq += CostoMaq
@@ -30,33 +32,37 @@ for i in range(iterations):
         promH += abs(CostoHombre - CostoMaq)
     promG += abs(CostoHombre - CostoMaq)
     
-    data.append([i+1, CostoHombre, maxquee1, CostoMaq, maxquee2, abs(CostoHombre - CostoMaq)])
+    data.append([i+1, CostoHombre, maxquee1, CostoMaq, maxquee2, CostoHombre - CostoMaq])
 
 # Calcular promedios y guardar en archivo CSV
-with open('datos.csv', mode='w', newline='') as file:
+with open(f'datos en {days}.csv', mode='w', newline='') as file:
     writer = csv.writer(file)
-
-    # Escribir encabezados
-    writer.writerow(['Número de Simulación', 'Costo de Hombres', 'Máximo número en colas Hombres', 'Costo de Máquinas', 'Máximo número en cola Máquinas', 'Diferencia'])
-
-    # Escribir los datos de cada iteración
+    # Headers
+    headers = ['Número de Simulación', 'Costo de Hombres',
+             'Máximo número en colas Hombres', 'Costo de Máquinas', 
+             'Máximo número en cola Máquinas', 'Diferencia']
+    headers_with_days = [f'{header} en {days} días' for header in headers]
+    writer.writerow(headers_with_days)
+     # Escribir los datos de cada iteración
     writer.writerows(data)
 
+with open(f'datos extra en {days}.csv', mode='w', newline='') as file:
+    writer = csv.writer(file)  
     # Calcular promedios
     promM = promM / cant if cant != 0 else 0
-    # promH = promH / (iterations - cant)
+    promH = promH / (iterations - cant) if cant != iterations else 0
     promG = promG / iterations
     CostoHombre_promedio = CostoHombre_total / iterations
     CostoMaq_promedio = CostoMaq_total / iterations
 
     # Escribir los totales y promedios al final del archivo
-    # writer.writerow([])
-    # writer.writerow(['Promedio de las Hombres', promM])
-    # writer.writerow(['Promedio de los Maquinas', promH])
-    # writer.writerow(['Promedio General', promG])
-    # writer.writerow(['Cantidad', cant])
-    # writer.writerow(['Costo promedio de Hombres', CostoHombre_promedio])
-    # writer.writerow(['Costo promedio de Maquinas', CostoMaq_promedio])
+    writer.writerow([])
+    writer.writerow(['Promedio de las Hombres', promM])
+    writer.writerow(['Promedio de los Maquinas', promH])
+    writer.writerow(['Promedio General', promG])
+    writer.writerow(['Cantidad', cant])
+    writer.writerow(['Costo promedio de Hombres', CostoHombre_promedio])
+    writer.writerow(['Costo promedio de Maquinas', CostoMaq_promedio])
 
 
 for i in range(iterations): 
@@ -87,7 +93,5 @@ print('Promedio de la cola de Maquinas: ', str(colaMaquinas/iterations))
 
 
 
-data = pd.read_csv('datos.csv')
-create_and_save_plots(data, 30)
-
-sys.stdout.close()
+data_csv = pd.read_csv(f'datos en {days}.csv')
+create_and_save_plots(data_csv, 29, days)
