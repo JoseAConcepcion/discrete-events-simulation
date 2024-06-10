@@ -81,7 +81,39 @@ def Compute(initialCost, partialCost, lambdaE:float, lambdaP:float, topTime:floa
         counter += abs(Entries[i+1]-Exits[i+1])
         counterSys += abs(Exits[i+1]-entrySys[i+1])
         # print("costo hasta ahora", counter)
-    
+    entryIndex = 1
+    repairIndex = 1
+    exitIndex = 1
+    cs = 0
+    cq = 0
+    cantS = 0
+    cantC = 0
+    for i in range(topTime*365):
+        while True:
+            check = True
+            if(entryIndex<len(Entries) and i>=Entries[entryIndex]):
+                cantS+=1
+                cs += cantS
+                entryIndex+=1
+                check = False
+            if(repairIndex<len(entrySys) and i>=entrySys[repairIndex]):
+                cantC += 1
+                cq += cantC
+                repairIndex+=1
+                check = False
+            if(exitIndex<len(Exits) and i>=Exits[exitIndex]):
+                exitIndex+=1
+                cantS -=1
+                cantC -= 1
+                cs += cantS
+                cq += cantC
+                check = False
+            if(check):
+                break
+    MeanSysCant = cs/(topTime*365)
+    MeanQueueCant = cq/(topTime*365)  
+    print('MeanSysCant: ',MeanSysCant)
+    print('MeanQueueCant: ',MeanQueueCant)  
     cost = initialCost + counter*partialCost
     meanSysTime = counter/len(Entries.items())
     meanQueueTime = (counter - counterSys)/len(Entries.items())
