@@ -18,12 +18,12 @@ def Simulation(exponentialLambda:float, poissonLambda:float, timeLimit:float):
     numberOfExits:int = 0
     Entries:{int,float} = {}
     Exits:{int,float} = {}
+    entrySys:{int,float} = {}
     queue:int = 0
     maxQueueValue:int = 0
     initialTime = Exponential(poissonLambda)
     entryTime = initialTime
     exitTime = math.inf
-    entrySys:{int,float} = {}
     
     #todo export to csv to work with statistics later
     while True:
@@ -40,10 +40,10 @@ def Simulation(exponentialLambda:float, poissonLambda:float, timeLimit:float):
             if(queue==1):
                 ex = Exponential(exponentialLambda)
                 exitTime = time+ex
+                entrySys[numberOfEntries] = time + ex
             Entries[numberOfEntries] = time #? esto deberia subirse
         
         if(exitTime<entryTime):
-            lapse = time
             time = exitTime
             numberOfExits+=1
             queue-=1
@@ -54,13 +54,12 @@ def Simulation(exponentialLambda:float, poissonLambda:float, timeLimit:float):
                 next = Exponential(exponentialLambda)
                 exitTime = time+next
             Exits[numberOfExits] = time
-            entrySys[numberOfExits] = lapse
+            entrySys[numberOfExits + 1] = time
         
         if(min(entryTime,exitTime) == entryTime and entryTime>timeLimit):
             entryTime = math.inf
         
             while(queue>0):
-                lapse = time
                 time = exitTime
                 numberOfExits+=1
                 queue-=1
@@ -69,7 +68,7 @@ def Simulation(exponentialLambda:float, poissonLambda:float, timeLimit:float):
                     exitTime = time + Exponential(exponentialLambda)
         
                 Exits[numberOfExits] = time
-                entrySys[numberOfExits] = lapse
+                entrySys[numberOfExits+1] = time
         
             return (Entries, Exits, maxQueueValue, entrySys)
 
@@ -82,13 +81,18 @@ def Compute(initialCost, partialCost, lambdaE:float, lambdaP:float, topTime:floa
         counter += abs(Entries[i+1]-Exits[i+1])
         counterSys += abs(Exits[i+1]-entrySys[i+1])
         # print("costo hasta ahora", counter)
+    
     cost = initialCost + counter*partialCost
-    meanSysTime = counter/(topTime*24)
-    meanQueueTime = (counter - counterSys)/(topTime*24)
-    meanRepairTime = counterSys/(topTime*24)
-    print('Entries: ',Entries)
-    print('Exits: ',Exits)
-    print('RepairEntrances: ', entrySys)
+    meanSysTime = counter/len(Entries.items())
+    meanQueueTime = (counter - counterSys)/len(Entries.items())
+    meanRepairTime = counterSys/ len(Entries.items())
+    print()
+    print('CounterSYS: ', str(counterSys))
+    print('MeanRepairTime', str(meanRepairTime))
+    print()
+    # print('Entries: ',Entries)
+    # print('Exits: ',Exits)
+    # print('RepairEntrances: ', entrySys)
     print('Tiempo promedio en sistema: ', str(meanSysTime))
     print('Tiempo promedio en cola: ', str(meanQueueTime))
     print('Tiempo promedio en reparacion: ', str(meanRepairTime))

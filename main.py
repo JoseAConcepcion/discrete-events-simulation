@@ -16,7 +16,7 @@ colaMaquinas = 0
 
 data = []
 iterations = 30
-days = 30
+days = 300
 # Calcular y guardar los datos de cada iteración
 for i in range(iterations):
     CostoHombre, maxquee1, meanSysTime1, meanQueueTime1, meanRepairTime1s = Compute(750000, days*24, 4, 3, 60) # 
