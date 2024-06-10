@@ -18,7 +18,7 @@ def Simulation(exponentialLambda:float, poissonLambda:float, timeLimit:float):
     numberOfExits:int = 0
     Entries:{int,float} = {}
     Exits:{int,float} = {}
-    entrySys:{int,float} = {}
+    entryMaintanance:{int,float} = {}
     queue:int = 0
     maxQueueValue:int = 0
     initialTime = Exponential(poissonLambda)
@@ -40,7 +40,7 @@ def Simulation(exponentialLambda:float, poissonLambda:float, timeLimit:float):
             if(queue==1):
                 ex = Exponential(exponentialLambda)
                 exitTime = time+ex
-                entrySys[numberOfEntries] = time + ex
+                entryMaintanance[numberOfEntries] = time + ex
             Entries[numberOfEntries] = time #? esto deberia subirse
         
         if(exitTime<entryTime):
@@ -54,7 +54,7 @@ def Simulation(exponentialLambda:float, poissonLambda:float, timeLimit:float):
                 next = Exponential(exponentialLambda)
                 exitTime = time+next
             Exits[numberOfExits] = time
-            entrySys[numberOfExits + 1] = time
+            entryMaintanance[numberOfExits + 1] = time
         
         if(min(entryTime,exitTime) == entryTime and entryTime>timeLimit):
             entryTime = math.inf
@@ -68,9 +68,9 @@ def Simulation(exponentialLambda:float, poissonLambda:float, timeLimit:float):
                     exitTime = time + Exponential(exponentialLambda)
         
                 Exits[numberOfExits] = time
-                entrySys[numberOfExits+1] = time
+                entryMaintanance[numberOfExits+1] = time
         
-            return (Entries, Exits, maxQueueValue, entrySys)
+            return (Entries, Exits, maxQueueValue, entryMaintanance)
 
 
 def Compute(initialCost, partialCost, lambdaE:float, lambdaP:float, topTime:float):
